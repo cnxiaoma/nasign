@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<title>签到送NAS</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src=js/jquery.slim.min.js></script>
+<script src=js/nebPay.js></script>
+</head>
+<body>
+<script>
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+        //to check if the extension is installed
+        //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+        setTimeout(function () { if (typeof (webExtensionWallet) === "undefined") {
+                alert("请先安装星云钱包插件.");
+        }}, 500); //等待加载钱包
+        function onClickCallDapp(value,callFunction) {
+                var to = "n1z799vVo9oyb3S9cxmxhLaSVEbx11jYwHg"; //合约地址
+                var callArgs = ""; 
+                nebPay.call(to,
+                value,
+                callFunction,
+                callArgs,
+                {
+                        qrcode: {
+                        showQRCode: false
+                        },
+                        goods: {
+                        name: "nasign",
+                        desc: "0.001 nas from nasign"
+                        },
+                        listener: cbCallDapp
+                });
+        }
+        function cbCallDapp(resp) {
+                console.log("callback resp: " + JSON.stringify(resp));
+        }
+</script>       
+<nav class="navbar navbar-default navbar-fixed-top">
+<div class="container">
+        <div class="navbar-header">
+        签到送NAS
+        </div>
+        <ul class="nav navbar-nav">
+        <li><a class="nav-link link " href="https://github.com/ChengOrangeJu/WebExtensionWallet" target="_blank">安装星云钱包插件</a>
+        </li></ul>
+</div>
+</nav>
+<div class="container">
+        <h3 style="text-align: center">
+                欢迎使用基于星云链智能合约技术的每日签到应用
+        </h3>
+        <h4>使用说明</h4><h6>(签到需使用Chrome浏览器并且安装星云钱包插件，钱包中留有少量NAS)</h6>
+        <p>
+        <li>这是一个基于星云链的智能合约的签到应用，签到就送0.001个NAS，每账号每12小时领一次，领完为止。</li>
+        <li>代码完全开源，<a href="https://github.com/cnxiaoma/nasign" target="_blank">源代码托管在Github</a>上。网站主人可以将代码自由使用在自己的网站上，吸引用户每天访问。
+        </li>
+        </p>
+        <div style="text-align: center">
+                <button class="btn btn-primary btn-lg" type="button" 
+                onclick="onClickCallDapp(0,'sign');" style="width:140px">
+                        签到领取NAS
+                </button>
+                <button class="btn btn-success btn-lg" type="button" 
+                onclick="onClickCallDapp(1,'addnas');" style="width:140px">
+                        管理员充值
+                </button>
+        </div>
+</div>
+</body>
+</html>
